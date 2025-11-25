@@ -1,7 +1,9 @@
 <script>
-  const params = new URLSearchParams(location.search);
-  const userId = params.get("userId");
+  const params = new URLSearchParams(window.location.search);
   const secret = params.get("secret");
+  const userId = params.get("userId");
 
-  window.location = `myapp://password-reset?userId=${userId}&secret=${secret}`;
+  // This opens Expo app
+  window.location.href = `app://Authentication/password-reset?userId=${userId}&secret=${secret}`;
 </script>
+
