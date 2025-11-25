@@ -1,9 +1,61 @@
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const secret = params.get("secret");
-  const userId = params.get("userId");
+<!DOCTYPE html>
+<html>
 
-  // This opens Expo app
-  window.location.href = `app://Authentication/password-reset?userId=${userId}&secret=${secret}`;
-</script>
+<head>
+    <title>Password Reset Redirect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            text-align: center;
+        }
 
+        #msg {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Redirecting...</h2>
+    <div id="msg">Please wait</div>
+
+    <script>
+        try {
+            const params = new URLSearchParams(window.location.search);
+            const userId = params.get("userId");
+            const secret = params.get("secret");
+
+            // Debug output
+            console.log("userId:", userId);
+            console.log("secret:", secret);
+
+            if (!userId || !secret) {
+                document.getElementById("msg").innerHTML =
+                    "❌ Invalid reset link (missing parameters)";
+                throw new Error("Missing userId or secret");
+            }
+
+            document.getElementById("msg").innerHTML = "Opening your app...";
+
+            // Build Expo deep link
+            const deepLink = `app://Authentication/password-reset?userId=${userId}&secret=${secret}`;
+            console.log("Redirecting to:", deepLink);
+
+            // Redirect to Expo App
+            window.location.href = deepLink;
+
+            // If app doesn't open, show fallback message
+            setTimeout(() => {
+                document.getElementById("msg").innerHTML =
+                    "If the app did not open, please open it manually.";
+            }, 3000);
+        } catch (err) {
+            console.error(err);
+            document.getElementById("msg").innerHTML = "❌ Error: " + err.message;
+        }
+    </script>
+</body>
+</html>
